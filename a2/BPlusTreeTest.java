@@ -9,6 +9,39 @@ import org.junit.Test;
 
 public class BPlusTreeTest {
 
+	@Test
+	public void testSearch1() {
+		Character alphabet[] = new Character[] { 'a','b','c','d','e','f','g' };
+		String alphabetStrings[] = new String[alphabet.length];
+		for (int i = 0; i < alphabet.length; i++) {
+			alphabetStrings[i] = (alphabet[i]).toString();
+		}
+		BPlusTree<Character, String> tree = new BPlusTree<Character, String>();
+		Utils.bulkInsert(tree, alphabet, alphabetStrings);
+
+		String test = tree.search('a');
+		String correct = "a";
+
+		assertEquals(correct, test);
+	}
+	
+	@Test
+	public void testSearch2() {
+		Integer primeNumbers[] = new Integer[] { 2, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14,
+				15, 16 };
+		String primeNumberStrings[] = new String[primeNumbers.length];
+		for (int i = 0; i < primeNumbers.length; i++) {
+			primeNumberStrings[i] = (primeNumbers[i]).toString();
+		}
+		BPlusTree<Integer, String> tree = new BPlusTree<Integer, String>();
+		Utils.bulkInsert(tree, primeNumbers, primeNumberStrings);
+
+		String test = tree.search(2);
+		String correct = "2";
+		assertEquals(test, correct);
+
+	}
+	
 	// add some nodes, see if it comes out right, delete one, see if it's right
 	@Test
 	public void testHybrid1() {
