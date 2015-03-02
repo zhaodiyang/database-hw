@@ -155,7 +155,7 @@ public class BPlusTree<K extends Comparable<K>, T> {
 			MyEntry<K, Node<K,T>> newEntry = splitIndexNode(indexnode);
 			ht--;
 			if (ht == 0) {
-				IndexNode<K,T> newRoot = new IndexNode<K,T>(entry.getKey(), indexnode, entry.getValue());
+				IndexNode<K,T> newRoot = new IndexNode<K,T>(newEntry.getKey(), indexnode, newEntry.getValue());
 				root = newRoot;
 			}
 			else
@@ -260,13 +260,15 @@ public class BPlusTree<K extends Comparable<K>, T> {
 		
 	    // store the 2nd half of the key/value pair in a new node
 		K key = indexnode.keys.get(half);
-		List<K> keyr = indexnode.keys.subList(half, len);
-		List<Node<K,T>> childrenr = indexnode.children.subList(half, len);
+		List<K> keyr = indexnode.keys.subList(half+1, len);
+		List<Node<K,T>> childrenr = indexnode.children.subList(half+1, len+1);
 		IndexNode<K,T> indexr = new IndexNode<K,T>(keyr, childrenr);
 		
 		// remove the 2nd half of the key/value pair from index node
-		for (int i=half; i<len; i++)
+		for (int i=half; i<len; i++) {
 		    indexnode.keys.remove(half);
+		    indexnode.children.remove(half+1);
+		}
 		
 		MyEntry<K, Node<K,T>> newEntry = new MyEntry<K,Node<K,T>>(key, indexr);
 		return newEntry;
