@@ -9,8 +9,6 @@ public class BPlusTree<K extends Comparable<K>, T> {
 
 	public Node<K,T> root;
 	public static final int D = 2;
-	
-	private int height = getHeight();
 
 	/**
 	 * TODO Search the value for a specific key
@@ -112,7 +110,7 @@ public class BPlusTree<K extends Comparable<K>, T> {
 			// leaf node overflowed
 			if (leafnode.isOverflowed()){
 				MyEntry<K, Node<K,T>> entry = splitLeafNode(leafnode);
-				insertToParent(entry, height);
+				insertToParent(entry, getHeight());
 			}
 		}
 	}
@@ -166,7 +164,8 @@ public class BPlusTree<K extends Comparable<K>, T> {
 	 * */
 	public int getHeight() {
 		int ht = 0;
-		if(!root.isLeafNode) {
+		if (root == null) return ht;
+		if (!root.isLeafNode) {
 			Node<K,T> node = root;
 			while(!node.isLeafNode) {
 				IndexNode<K,T> indexNode = (IndexNode<K,T>) node;
@@ -275,12 +274,16 @@ public class BPlusTree<K extends Comparable<K>, T> {
 	 * @param key
 	 */
 	public void delete(K key) {
-		LeafNode<K,T> node = (LeafNode<K,T>) root;
-		 
+		
+		LeafNode<K,T> node;
 		// if root is not a leaf node, 
 		// find the leaf node contains the key
-		if (!root.isLeafNode)
-			node = (LeafNode<K,T>)tree_search(key, node);
+		if (!root.isLeafNode) {
+			IndexNode<K,T> indexnode = (IndexNode<K,T>)root;
+			node = (LeafNode<K,T>)tree_search(key, indexnode);
+		}
+		else
+			node = (LeafNode<K,T>) root;
 		 
 		// find the matching key and remove its key/value pair
 		for(int i=0; i<node.keys.size(); i++){
@@ -300,10 +303,10 @@ public class BPlusTree<K extends Comparable<K>, T> {
 				return;
 				}
 			// root is an index node
-			IndexNode<K,T> parentNode = findParentNode(node.keys.get(0), height); 
+			IndexNode<K,T> parentNode = findParentNode(node.keys.get(0), getHeight()); 
 			LeafNode<K,T> sibling;	// store the target sibling node
 			int parentIndex;		// store the removed index value
-			int currht = height;	// store the current height of the tree
+			int currht = getHeight();	// store the current height of the tree
 			
 			// determine the target sibling:
 			// if left leaf is not null, check if have the same parent
@@ -312,7 +315,7 @@ public class BPlusTree<K extends Comparable<K>, T> {
 			if (node.previousLeaf != null) {
 				sibling = node.previousLeaf;
 				if (findParentNode(sibling.keys.get(0), 
-						height).keys.get(0).compareTo(parentNode.keys.get(0)) == 0)
+						getHeight()).keys.get(0).compareTo(parentNode.keys.get(0)) == 0)
 					parentIndex = handleLeafNodeUnderflow(sibling, node, parentNode);
 				else {
 					sibling = node.nextLeaf;
