@@ -16,12 +16,16 @@ public class BPlusTree<K extends Comparable<K>, T> {
 	 * @param key
 	 */
 	public T search(K key) {
-		 LeafNode<K,T> node = (LeafNode<K,T>) root;
+		 LeafNode<K,T> node;
 		 
 		 // if root is not a leaf node, 
 		 // find the leaf node contains the key
-		 if (!root.isLeafNode)
-			 node = (LeafNode<K,T>)tree_search(key, node);
+		 if (!root.isLeafNode) {
+			 IndexNode<K,T> indexnode = (IndexNode<K,T>) root;
+			 node = (LeafNode<K,T>)tree_search(key, indexnode);
+		 }
+		 else
+			 node = (LeafNode<K,T>) root;
 		 
 		 // find the matching key and return its value
 		 for(int i=0; i<node.keys.size(); i++){
