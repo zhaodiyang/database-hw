@@ -102,6 +102,8 @@ public class BPlusTree<K extends Comparable<K>, T> {
 				IndexNode<K,T> newRoot = new IndexNode<K,T>(entry.getKey(), leafnode, entry.getValue());
 				root = newRoot;
 			}
+			else
+				root = leafnode;
 		}
 		// root is an index node
 		else{
@@ -114,7 +116,7 @@ public class BPlusTree<K extends Comparable<K>, T> {
 			// leaf node overflowed
 			if (leafnode.isOverflowed()){
 				MyEntry<K, Node<K,T>> entry = splitLeafNode(leafnode);
-				insertToParent(entry, getHeight());
+				insertToParent(entry, getHeight()-1);
 			}
 		}
 	}
@@ -154,12 +156,13 @@ public class BPlusTree<K extends Comparable<K>, T> {
 		if (indexnode.isOverflowed()) {
 			MyEntry<K, Node<K,T>> newEntry = splitIndexNode(indexnode);
 			ht--;
-			if (ht == 0) {
+			if (ht < 0) {
 				IndexNode<K,T> newRoot = new IndexNode<K,T>(newEntry.getKey(), indexnode, newEntry.getValue());
 				root = newRoot;
 			}
-			else
-			    insertToParent(newEntry, ht-1);
+			else {
+			    insertToParent(newEntry, ht);
+			}
 		}
 	}
 	
@@ -189,7 +192,7 @@ public class BPlusTree<K extends Comparable<K>, T> {
 		IndexNode<K,T> indexnode = (IndexNode<K,T>) root;
 		
 		// find the index node that once pointed to the entry's key
-		for(int i=0; i<ht-1; i++) {
+		for(int i=0; i<ht; i++) {
 			// key < k0
 			if (indexnode.keys.get(0).compareTo(key) > 0) 
 				indexnode = (IndexNode<K,T>)indexnode.children.get(0);
@@ -288,9 +291,9 @@ public class BPlusTree<K extends Comparable<K>, T> {
 			IndexNode<K,T> indexnode = (IndexNode<K,T>)root;
 			node = (LeafNode<K,T>)tree_search(key, indexnode);
 		}
-		else
+		else {
 			node = (LeafNode<K,T>) root;
-		 
+		}
 		// find the matching key and remove its key/value pair
 		for(int i=0; i<node.keys.size(); i++){
 			if(node.keys.get(i).compareTo(key) == 0) {
@@ -307,9 +310,9 @@ public class BPlusTree<K extends Comparable<K>, T> {
 				if (root.keys.size() == 0)
 					root = null;
 				return;
-				}
+			}
 			// root is an index node
-			IndexNode<K,T> parentNode = findParentNode(node.keys.get(0), getHeight()); 
+			IndexNode<K,T> parentNode = findParentNode(node.keys.get(0), getHeight()-1); 
 			LeafNode<K,T> sibling;	// store the target sibling node
 			int parentIndex;		// store the removed index value
 			int currht = getHeight();	// store the current height of the tree
@@ -321,7 +324,7 @@ public class BPlusTree<K extends Comparable<K>, T> {
 			if (node.previousLeaf != null) {
 				sibling = node.previousLeaf;
 				if (findParentNode(sibling.keys.get(0), 
-						getHeight()).keys.get(0).compareTo(parentNode.keys.get(0)) == 0)
+						getHeight()-1).keys.get(0).compareTo(parentNode.keys.get(0)) == 0)
 					parentIndex = handleLeafNodeUnderflow(sibling, node, parentNode);
 				else {
 					sibling = node.nextLeaf;
@@ -347,7 +350,7 @@ public class BPlusTree<K extends Comparable<K>, T> {
 				else if (parentNode.isUnderflowed()) {
 					IndexNode<K,T> indexSibling;	// store the target index sibling node
 					IndexNode<K,T> currNode = parentNode;
-					parentNode = findParentNode(parentNode.keys.get(0), currht );
+					parentNode = findParentNode(parentNode.keys.get(0), currht-1 );
 					int index = 0;	// store child index value
 					
 					while (parentNode.children.get(index).keys.get(0).compareTo(
@@ -366,7 +369,7 @@ public class BPlusTree<K extends Comparable<K>, T> {
 					}
 				}
 			}	
-		}	
+		}
 	}
 
 	/**
