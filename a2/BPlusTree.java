@@ -123,7 +123,7 @@ public class BPlusTree<K extends Comparable<K>, T> {
 	
 	/**
 	 * @param entry
-	 * @param tree height, root is at height 0
+	 * @param tree height you want to insert the entry to, root is at height 0
 	 * */
 	
 	public void insertToParent(MyEntry<K, Node<K,T>> entry, int ht) {
@@ -145,8 +145,10 @@ public class BPlusTree<K extends Comparable<K>, T> {
 		else {
 			for(int j=0; j<indexnode.keys.size()-1; j++) {
 				if (indexnode.keys.get(j).compareTo(entry.getKey()) <= 0 && 
-						indexnode.keys.get(j+1).compareTo(entry.getKey()) > 0)
+						indexnode.keys.get(j+1).compareTo(entry.getKey()) > 0) {
 					index = j + 1;
+					break;
+				}
 			}
 		}
 		// insert entry to the index
@@ -206,8 +208,10 @@ public class BPlusTree<K extends Comparable<K>, T> {
 			else {
 				for(int j=0; j<indexnode.keys.size()-1; j++) {
 					if (indexnode.keys.get(j).compareTo(key) <= 0 && 
-							indexnode.keys.get(j+1).compareTo(key) > 0)
+							indexnode.keys.get(j+1).compareTo(key) > 0) {
 						indexnode = (IndexNode<K,T>)indexnode.children.get(j+1);
+						break;
+					}
 				}
 			}
 		}
