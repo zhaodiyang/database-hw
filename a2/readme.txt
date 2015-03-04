@@ -4,7 +4,8 @@ Diyang Zhao (dz276),  Kai Wang (kw296)
 
 (1) Node.java, IndexNode.java, LeafNode.java, Utils.java, Tests.java: received from instructor without any modification.
 (2) BPlusTreeTest.java: Test file for testing search function and delete function.
-(3) BPlusTree.java: implemented all functions, could search, insert, delete elements in BPlusTree. Passed all test cases.
+(3) BPlusTree.java: implemented all functions, could search, insert, delete elements in BPlusTree. Passed all test cases. Search, insert, delete algorithms adapted from the textbook [1]. 
+(4) MyEntry.java: implements Map.Entry, so we can create objects to store (Key, Value) pair. Adapted from [2].
 
 BPlusTree.java:
 
@@ -34,3 +35,8 @@ when underflow happens in a leaf node, merge with the target sibling if possible
 
 - handleIndexNodeUnderflow
 when underflow happens in an index node, merge with the target sibling index node if possible, else redistribute keys and values with the target sibling, returns the index of the parent key/children that parent should remove
+
+Reference
+[1]Database Management Systems Third Edition, R.Ramakrishnan and J.Gehrke, McGraw-Hill Education, 2003, pp344-356
+[2]Java How To Create New Entry Key Value, stackoverflow, June 2010
+http://stackoverflow.com/questions/3110547/java-how-to-create-new-entry-key-value
