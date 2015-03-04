@@ -155,13 +155,14 @@ public class BPlusTreeTest {
 		tree.delete(4);
 		tree.delete(5);
 		tree.delete(33);
-		//tree.delete(32);
-		//tree.delete(31);
+		tree.delete(32);
+		tree.delete(31);
+		tree.delete(30);
 		
 		test = Utils.outputTree(tree);
-		System.out.println(test);
-
-
+		correct = "@16/@%%@10/12/14/@@24/27/@%%[(7,7);(9,9);]#[(10,10);(11,11);]#[(12,12);(13,13);]#[(14,14);(15,15);]$[(16,16);(22,22);]#[(24,24);(25,25);]"
+				+ "#[(27,27);(28,28);(29,29);]$%%";
+		assertEquals(test, correct);
 	}
 
 }
