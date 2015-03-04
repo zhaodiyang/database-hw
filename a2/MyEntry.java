@@ -1,3 +1,7 @@
+// Adapted from http://stackoverflow.com/questions/3110547/java-how-to-create-new-entry-key-value
+// Map.Entry cannot be instantiated because it's a generic type
+// Used to create entry object to store Key, Value pair
+
 import java.util.Map;
 
 public class MyEntry<K, V> implements Map.Entry<K, V>{
