@@ -257,9 +257,10 @@ We only need to find a range, so we do not want to scan the whole file. Hash is 
 (b) Use a linear hashed index on attribute R.a.\\
 We only need to find one pages, so it is easiest way to directly hash it and get the page we want.\\
 \\
-(c) Use a (clustered) B+ tree index on attribute R.a.\\
+(c) Use the file scan.\\
+We need to scan almost all the pages. Even though we use the tree or hash find the 21600 and 21800, we still need to scan all of the pages. So it is better to scan pages directly.\\
 \\
-(d) Access the sorted file for R directly.\\
+(d) Use the file scan.\\
 We need to scan almost all the pages. Even though we use the tree or hash find the 21600, we still need to scan all of the pages. So it is better to scan pages directly.\\
 \end{subsection}
 
