@@ -372,6 +372,8 @@ public class BPlusTree<K extends Comparable<K>, T> {
 						parentIndex  = handleIndexNodeUnderflow(indexSibling, currNode, parentNode);
 					}
 				}
+				else
+					parentIndex = -1;
 			}	
 		}
 	}
@@ -415,7 +417,7 @@ public class BPlusTree<K extends Comparable<K>, T> {
 		// redistribute
 		else {
 			// left node underflowed
-			if (left.keys.size() < 2) {
+			if (left.keys.size() < D) {
 				// change parent node key
 				K newKey = right.keys.get(1);
 				parent.keys.remove(leftIndex);
@@ -482,21 +484,42 @@ public class BPlusTree<K extends Comparable<K>, T> {
 		}
 		// redistribute
 		else {
-			// change parent node key
-			K newKey = right.keys.get(0);
-			K parentKey = parent.keys.get(leftIndex);
-			parent.keys.remove(leftIndex);
-			parent.keys.add(leftIndex, newKey);
-			
-			// add key/value to left
-			left.keys.add(parentKey);
-			left.children.add(right.children.get(0));
-			
-			// remove key/value from right
-			right.keys.remove(0);
-			right.children.remove(0);
-			
-			return -1;
+			// left overflowed
+			if (left.keys.size() < D) {
+				// change parent node key
+				K newKey = right.keys.get(0);
+				K parentKey = parent.keys.get(leftIndex);
+				parent.keys.remove(leftIndex);
+				parent.keys.add(leftIndex, newKey);
+
+				// add key/value to left
+				left.keys.add(parentKey);
+				left.children.add(right.children.get(0));
+
+				// remove key/value from right
+				right.keys.remove(0);
+				right.children.remove(0);
+
+				return -1;
+			}
+			// right overflowed
+			else {
+				// change parent node key
+				K newKey = left.keys.get(2*D-1);
+				K parentKey = parent.keys.get(leftIndex);
+				parent.keys.remove(leftIndex);
+				parent.keys.add(leftIndex, newKey);
+
+				// add key/value to right
+				right.keys.add(0, parentKey);
+				right.children.add(0, left.children.get(2*D));
+
+				// remove key/value from left
+				left.keys.remove(2*D-1);
+				left.children.remove(2*D);
+
+				return -1;
+			}
 		}
 	}
 }
