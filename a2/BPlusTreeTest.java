@@ -19,6 +19,13 @@ public class BPlusTreeTest {
 		String correct = "a1";
 		
 		assertEquals(correct, test);
+		
+        tree.insert("b2", "b2");
+        
+		test = tree.search("b2");
+		correct = "b2";
+		
+		assertEquals(correct, test);
 	}
 
 	@Test
