@@ -393,7 +393,7 @@ public class BPlusTree<K extends Comparable<K>, T> {
 		// find node index in parent
 		int leftIndex = 0;
 		for (int i=0; i<parent.children.size(); i++) {
-			if (parent.children.get(i).keys.get(0) == left.keys.get(0)) {
+			if (parent.children.get(i).keys.get(0).compareTo(left.keys.get(0)) == 0) {
 				leftIndex = i;
 				break;
 			}
@@ -413,12 +413,12 @@ public class BPlusTree<K extends Comparable<K>, T> {
 		// redistribute
 		else {
 			// change parent node key
-			K newKey = right.keys.get(0);
+			K newKey = right.keys.get(1);
 			parent.keys.remove(leftIndex);
 			parent.keys.add(leftIndex, newKey);
 			
 			// add key/value to left
-			left.keys.add(newKey);
+			left.keys.add(right.keys.get(0));
 			left.values.add(right.values.get(0));
 			
 			// remove key/value from right
