@@ -407,25 +407,47 @@ public class BPlusTree<K extends Comparable<K>, T> {
 				left.nextLeaf = right.nextLeaf;
 				left.nextLeaf.previousLeaf = left;
 			}
-
+			else {
+				left.nextLeaf = null;
+			}
 			return leftIndex;
 		}
 		// redistribute
 		else {
-			// change parent node key
-			K newKey = right.keys.get(1);
-			parent.keys.remove(leftIndex);
-			parent.keys.add(leftIndex, newKey);
-			
-			// add key/value to left
-			left.keys.add(right.keys.get(0));
-			left.values.add(right.values.get(0));
-			
-			// remove key/value from right
-			right.keys.remove(0);
-			right.values.remove(0);
-			
-			return -1;
+			// left node underflowed
+			if (left.keys.size() < 2) {
+				// change parent node key
+				K newKey = right.keys.get(1);
+				parent.keys.remove(leftIndex);
+				parent.keys.add(leftIndex, newKey);
+
+				// add key/value to left
+				left.keys.add(right.keys.get(0));
+				left.values.add(right.values.get(0));
+
+				// remove key/value from right
+				right.keys.remove(0);
+				right.values.remove(0);
+
+				return -1;
+			}
+			// right node underflowed
+			else {
+				// change parent node key
+				K newKey = left.keys.get(2*D-1);
+				parent.keys.remove(leftIndex);
+				parent.keys.add(leftIndex, newKey);
+
+				// add key/value to right
+				right.keys.add(0, left.keys.get(2*D-1));
+				right.values.add(0, left.values.get(2*D-1));
+
+				// remove key/value from left
+				left.keys.remove(2*D-1);
+				left.values.remove(2*D-1);
+
+				return -1;
+			}
 		}
 	}
 	
