@@ -219,28 +219,29 @@
 Assume: $M$ pages in R, $P_{R}$ tuples per page and $N$ pages in S, $P_{S}$ tuples per page.\\
 R is outer relation and S is inner relation.\\
 The cost of the ￼Index Nested Loops is $M+M*P_{R}*X$, where X is cost of finding matching S tuples.\\
-As we have clustered B+ tree index on S.A, we can assume traverse index to find first leaf page need 2 I/Os and scan and retrieve tuples need worst case $P_{S}$, then the cost X is $2*P_{S}$\\
-So, the cost is $M+M*P_{R}*2*P_{S}$\\
+As we have clustered B+ tree index on S.A, we can assume traverse index to find first leaf page need 4 I/Os and search and 1 I/O to retrieve tuples, then the cost X is $4+1=5$\\
+So, the cost is $M+5*M*P_{R}$\\
 \\
 (b)\\
 Assume: $M$ pages in R, $P_{R}$ tuples per page and $N$ pages in S, $P_{S}$ tuples per page.\\
 S is outer relation and R is inner relation.\\
 The cost of the ￼Index Nested Loops is $N+N*P_{S}*X$, where X is cost of finding matching R tuples.\\
-As we have unclustered B+ tree index on R.A, we would better scan the whole file, then the cost X is $M*P_{R}$\\
-So, the cost is $M+M*P_{R}*M*P_{R}$\\
+As we have unclustered B+ tree index on R.A, we can assume traverse index to find first leaf page need 4 I/Os and search and $\frac{M*P_{R}}{N*R_{S}}$ I/O to retrieve tuples, then the cost X is $4+\frac{M*P_{R}}{N*R_{S}}$\\
+So, the cost is $N+N*P_{S}*(4+\frac{M*P_{R}}{N*R_{S}})$\\
 \\
 (C)\\
 Assume: $M$ pages in R, $P_{R}$ tuples per page and $N$ pages in S, $P_{S}$ tuples per page.\\
 R is outer relation and S is inner relation.\\
 The cost of the ￼Index Nested Loops is $M+M*P_{R}*X$, where X is cost of finding matching S tuples.\\
-As we have hash index on S.A, we can assume hash to find first leaf page need 1 I/O and scan and retrieve tuples need worst case $P_{S}$then the cost X is $1*P_{S}$\\
-So, the cost is $M+M*P_{R}*P_{S}$\\
+As we have hash index on S.A, we can assume hash to find first leaf page need 1 I/O and scan and 1.3 I/O to retrieve tuples, then the cost X is $1+1.3=2.3$\\
+So, the cost is $M+2.3*M*P_{R}$\\
 \\
 (D)\\
 Assume: $M$ pages in R, $P_{R}$ tuples per page and $N$ pages in S, $P_{S}$ tuples per page.\\
 We have B buffers in the memory.\\
-Then merge-sort S and R needs $2M(log_{B-1}(M/B)+1)+2N(log_{B-1}(N/B)+1)$ and merge join need $M*N*P_{S}*P_{R}$\\
-So, the cost is $2M(log_{B-1}(M/B)+1)+2N(log_{B-1}(N/B)+1)+M*N*P_{S}*P_{R}$\\
+Then merge-sort S and R needs $2M(log_{B-1}(M/B)+1)+2N(log_{B-1}(N/B)+1)$ and merge join need $M*N$.\\
+But, both relations can be sorted in 2 passes, so the cost should be $2*M*2+2*N*2=4*M+4*N$\\
+So, the cost is $4*M+4*N+M*N$\\
 
 \end{subsection}
 
@@ -249,16 +250,17 @@ The number of passes required in two-way sort $log_{2}(N)+1=16$.\\
 Each page is read and written once per pass, then, the cost is $2N(log_{2}(N)+1)=960,000$\\
 The 2-way merge sort always uses just 3 buffer pages, it is impossible to sort these files in 2 passes.\\
 \end{subsection}
-
+\newpage
 \begin{subsection}{2.3}
-(a) Use a (clustered) B+ tree index on attribute R.a.\\
-We only need to find a range, so we do not want to scan the whole file. Hash is not good for range, so we use B+ tree.\\
+
+(a) Use the file scan.\\
+We only need to scan the beginning small part of the pages. Even though we use the tree or hash find the 21600, we still need to scan those pages. So it is better to scan pages directly.\\
 \\
 (b) Use a linear hashed index on attribute R.a.\\
-We only need to find one pages, so it is easiest way to directly hash it and get the page we want.\\
+We only need to find one pages, so it is easiest way to directly hash it and get the page we want. Hash is better than B+ plus tree to return this only index.\\
 \\
-(c) Use the file scan.\\
-We need to scan almost all the pages. Even though we use the tree or hash find the 21600 and 21800, we still need to scan all of the pages. So it is better to scan pages directly.\\
+(c) Use a (clustered) B+ tree index on attribute R.a.\\
+We need to find a part of the pages, so we do not want to scan the whole file. Hash is not good for range, so we use B+ tree to first find 21600 and 21800, then retrive the desired pages.\\
 \\
 (d) Use the file scan.\\
 We need to scan almost all the pages. Even though we use the tree or hash find the 21600, we still need to scan all of the pages. So it is better to scan pages directly.\\
