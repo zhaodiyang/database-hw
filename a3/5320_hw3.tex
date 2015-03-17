@@ -216,7 +216,7 @@
 
 \begin{subsection}{a}
 
-From reflexivity, $F \subseteq G$ then $G \rightarrow F$ $F \subseteq G^{+}$. And we have $F \subseteq F^{+}$, thus, $F^{+} \subseteq G^{+}$.
+From reflexivity, $F \subseteq G$ then $G \rightarrow F$ $F \subseteq G^{+}$. Then, any functional dependency implied by G is a functional dependency in F, thus, $F^{+} \subseteq G^{+}$.
 
 \end{subsection}
 
@@ -228,12 +228,16 @@ From the definition, none of Armstrong’s axioms can grow $F^{+}$. So, $(F^{+})
 
 \begin{subsection}{c}
 
-For all $f \in F, G 	\models f$, then $F \subseteq G^{+}$. And we have $F \subseteq F^{+}$, thus, $F^{+} \subseteq G^{+}$.
+For all $f \in F, G 	\models f$, then $F \subseteq G$. And we have proved in (a) that if $F \subseteq G$, then, $F^{+} \subseteq G^{+}$.
 
 \end{subsection}
 
 \begin{subsection}{d}
 
+Reflexivity: $Y \subseteq X \vdash X \rightarrow Y$ then, 
+$Y \subseteq X \models X \rightarrow Y$.
+
+Augmentation: $X \rightarrow Y \vdash XZ \rightarrow YZ $ then, $X \rightarrow Y \models XZ \rightarrow YZ $
 \end{subsection}
 
 \begin{subsection}{e}
@@ -260,13 +264,15 @@ For all $f \in F, G 	\models f$, then $F \subseteq G^{+}$. And we have $F \subse
 
 Keys: A C D , B C D , E C D\\
 Relation: 3NF\\
+Not all functional dependancies contain a key, but is part of the key, so it is 3NF.
 
 \end{subsection}
 
 \begin{subsection}{b}
 
 Keys: A, C\\
-Relation: BCNF\
+Relation: BCNF\\
+All functional dependancies contain a key, so it is BCNF.
 
 \end{subsection}
 \end{homeworkProblem}  
