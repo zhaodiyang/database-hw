@@ -27,72 +27,48 @@ public class FDChecker {
 		Iterator<FunctionalDependency> fdIter = fds.iterator();
 		while(fdIter.hasNext()){
 			FunctionalDependency fd = fdIter.next();
-			AttributeSet left = fd.left;
+			AttributeSet left = new AttributeSet(fd.left);
 			Attribute right = fd.right;
-			AttributeSet result = left;
+			AttributeSet result = new AttributeSet(left);
+			
 			do{
-				/**
-				 * t1
-				 * */
-				// attrs = result intersect t1 
-				left = result;
-				AttributeSet attrs = new AttributeSet();
-				Iterator<Attribute> attrIter = result.iterator();
-				while(attrIter.hasNext()){
-					Attribute tmp = attrIter.next();
-					if(t1.contains(tmp))
-						attrs.add(tmp);
+				left = new AttributeSet(result);
+				AttributeSet table;
+				
+				// we will always have two tables to check
+				for(int i=0; i<2; i++){
+					
+					// assign table to t1 or t2
+					table = i==0 ? t1 : t2;
+					
+					// attrs = result intersect table
+					AttributeSet attrs = new AttributeSet();
+					Iterator<Attribute> attrIter = result.iterator();
+					while(attrIter.hasNext()){
+						Attribute tmp = attrIter.next();
+						if(table.contains(tmp))
+							attrs.add(tmp);
+					}
+
+					// attrs = closure(attrs)
+					Set<FunctionalDependency> fdSet =  new HashSet<FunctionalDependency>();
+					fdSet.add(fd);
+					attrs = closure(attrs, fdSet);
+
+					// attrsTmp = attrs intersect table
+					AttributeSet attrsTmp = new AttributeSet();
+					attrIter = attrs.iterator();
+					while(attrIter.hasNext()){
+						Attribute tmp = attrIter.next();
+						if(table.contains(tmp))
+							attrsTmp.add(tmp);
+					}
+
+					// result = result union attrsTmp
+					attrIter = attrsTmp.iterator();
+					while(attrIter.hasNext())
+						result.add(attrIter.next());
 				}
-				
-				// attrs = closure(attrs)
-				Set<FunctionalDependency> fdSet =  new HashSet<FunctionalDependency>();
-				fdSet.add(fd);
-				attrs = closure(attrs, fdSet);
-				
-				// attrsTmp = attrs intersect t1
-				AttributeSet attrsTmp = new AttributeSet();
-				attrIter = attrs.iterator();
-				while(attrIter.hasNext()){
-					Attribute tmp = attrIter.next();
-					if(t1.contains(tmp))
-						attrsTmp.add(tmp);
-				}
-				
-				// result = result union attrsTmp
-				attrIter = attrsTmp.iterator();
-				while(attrIter.hasNext())
-					result.add(attrIter.next());
-				
-				/**
-				 * t2
-				 * */
-				// attrs = result intersect t2
-				attrs = new AttributeSet();
-				attrIter = result.iterator();
-				while(attrIter.hasNext()){
-					Attribute tmp = attrIter.next();
-					if(t2.contains(tmp))
-						attrs.add(tmp);
-				}
-				
-				// attrs = closure(attrs)
-				fdSet =  new HashSet<FunctionalDependency>();
-				fdSet.add(fd);
-				attrs = closure(attrs, fdSet);
-				
-				// attrsTmp = attrs intersect t2
-				attrsTmp = new AttributeSet();
-				attrIter = attrs.iterator();
-				while(attrIter.hasNext()){
-					Attribute tmp = attrIter.next();
-					if(t2.contains(tmp))
-						attrsTmp.add(tmp);
-				}
-				
-				// result = result union attrsTmp
-				attrIter = attrsTmp.iterator();
-				while(attrIter.hasNext())
-					result.add(attrIter.next());
 				
 			}while(!left.equals(result));
 			
@@ -125,7 +101,7 @@ public class FDChecker {
 				sharedAttrs.add(tmp);
 		}
 		AttributeSet closureAttrs = closure(sharedAttrs, fds);
-		if(closureAttrs.equals(t1) || closureAttrs.equals(t2))
+		if(closureAttrs.containsAll(t1) || closureAttrs.containsAll(t2))
 			return true;
 		
 		return false;
@@ -134,11 +110,11 @@ public class FDChecker {
 	//recommended helper method
 	//finds the total set of attributes implied by attrs
 	public static AttributeSet closure(AttributeSet attrs, Set<FunctionalDependency> fds) {
-		AttributeSet result = attrs;
-		AttributeSet tmp = result;
+		AttributeSet tmp = attrs;
+		AttributeSet result;
 		
 		do{
-			result = tmp;
+			result = new AttributeSet(tmp);
 			Iterator<FunctionalDependency> iterfd = fds.iterator();
 			while(iterfd.hasNext()){
 				FunctionalDependency fd = iterfd.next();
