@@ -133,7 +133,7 @@ public class FDChecker {
 
 	//recommended helper method
 	//finds the total set of attributes implied by attrs
-	public static AttributeSet closure(AttributeSet attrs, Set<FunctionalDependency> fds) {
+	private static AttributeSet closure(AttributeSet attrs, Set<FunctionalDependency> fds) {
 		AttributeSet result = attrs;
 		AttributeSet tmp = result;
 		
@@ -143,12 +143,6 @@ public class FDChecker {
 			while(iterfd.hasNext()){
 				FunctionalDependency fd = iterfd.next();
 				AttributeSet left = fd.left;
-				Attribute right = fd.right;
-				
-				// redundancy check
-				/*
-				if(left.contains(right))
-					left.remove(right);*/
 				
 				Iterator<Attribute> iter = left.iterator();
 				boolean leftInAttrs = true;
