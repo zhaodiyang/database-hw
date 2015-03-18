@@ -5,6 +5,58 @@ import java.util.*;
 public class Test {
 
 	@org.junit.Test
+	public void closuretest1() {
+		AttributeSet t1 = new AttributeSet();
+		AttributeSet t2 = new AttributeSet();
+		Set<FunctionalDependency> fds = new HashSet<FunctionalDependency>();
+		
+		t1.add(new Attribute("a"));
+		
+		fds.add(new FunctionalDependency(t1,new Attribute("a")));
+
+		// attrs
+		// a
+		// fds
+		// a -> a
+		assertTrue(t1.equals(FDChecker.closure(t1, fds)));
+		
+		
+		fds.add(new FunctionalDependency(t1, new Attribute("b")));
+		// tables
+		// a
+		// fds
+		// a -> a
+		// a -> b
+		t2.add(new Attribute("a"));
+		t2.add(new Attribute("b"));
+		assertTrue(t2.equals(FDChecker.closure(t1, fds)));
+	}
+	
+	@org.junit.Test
+	public void closuretest2() {
+		AttributeSet t1 = new AttributeSet();
+		AttributeSet t2 = new AttributeSet();
+		AttributeSet t3 = new AttributeSet();
+		Set<FunctionalDependency> fds = new HashSet<FunctionalDependency>();
+		
+		t1.add(new Attribute("a"));
+		t3.add(new Attribute("b"));
+		
+		fds.add(new FunctionalDependency(t3, new Attribute("c")));
+		fds.add(new FunctionalDependency(t1, new Attribute("b")));
+		// tables
+		// a
+		// fds
+		// b -> c
+		// a -> b
+		t2.add(new Attribute("a"));
+		t2.add(new Attribute("b"));
+		t2.add(new Attribute("c"));
+		assertTrue(t2.equals(FDChecker.closure(t1, fds)));
+	}
+	
+	
+	@org.junit.Test
 	public void depPresBasictest() {
 		AttributeSet t1 = new AttributeSet();
 		AttributeSet t2 = new AttributeSet();
@@ -78,7 +130,7 @@ public class Test {
 		
 		fds.add(new FunctionalDependency(t2, new Attribute("a")));
 		// tables
-		// a
+		// a b
 		// b
 		// fds
 		// ab -> b
