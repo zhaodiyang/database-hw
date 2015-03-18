@@ -1,0 +1,3 @@
+CS4320 HW3 PROGRAMMING PART
+README.txt
+Diyang Zhao (dz276),  Kai Wang (kw296)
