@@ -235,13 +235,16 @@ For all $f \in F, G 	\models f$, then $F \subseteq G$. And we have proved in (a)
 \begin{subsection}{d}
 
 Reflexivity: $Y \subseteq X \vdash X \rightarrow Y$ then, 
-$Y \subseteq X \models X \rightarrow Y$.
-
-Augmentation: $X \rightarrow Y \vdash XZ \rightarrow YZ $ then, $X \rightarrow Y \models XZ \rightarrow YZ $
+$Y \subseteq X \models X \rightarrow Y$.\\
+For any two tuples $t, s$ in $R$, if $t(x) = s(X)$ then as $Y \subseteq X$, $t(Y) = s(Y)$, thus $X \rightarrow Y$.\\
+\\
+Augmentation: $X \rightarrow Y \vdash XZ \rightarrow YZ $ then, $X \rightarrow Y \models XZ \rightarrow YZ $\\
+For any two tuples $t, s$ in $R$, if $t(X) = t(Y)$, then $t(XZ) = t(YZ)$, thus $XZ \rightarrow YZ$ 
 \end{subsection}
 
 \begin{subsection}{e}
 
+It is always true that $F_{X}\cup F_{Y}\subseteq F$. And we have proved in (a) that if $F_{X}\cup F_{Y}\subseteq F$, then, $(F_{X}\cup F_{Y})^{+}\subseteq F^{+}$
 \end{subsection}
 
 \end{homeworkProblem}   
