@@ -133,7 +133,7 @@ public class FDChecker {
 
 	//recommended helper method
 	//finds the total set of attributes implied by attrs
-	private static AttributeSet closure(AttributeSet attrs, Set<FunctionalDependency> fds) {
+	public static AttributeSet closure(AttributeSet attrs, Set<FunctionalDependency> fds) {
 		AttributeSet result = attrs;
 		AttributeSet tmp = result;
 		
