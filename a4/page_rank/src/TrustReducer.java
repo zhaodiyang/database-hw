@@ -41,9 +41,9 @@ public class TrustReducer extends Reducer<IntWritable, NodeOrDouble, IntWritable
 				if(m.outgoingSize() == 0) {
 					
 					// API requires a long-type value for the increment function
-					// so scale up by 10^6 here to also preserve accuracy
+					// so scale up by 10^3 here to add accuracy
 					// will scale down back in LeftoverReducer
-					long scaledPR = (long)(m.getPageRank() * 1e6);
+					long scaledPR = (long)(m.getPageRank() * 1e3);
 					context.getCounter(Counter.LOST).increment(scaledPR);
 				}
 			}
