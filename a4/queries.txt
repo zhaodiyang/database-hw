@@ -1,0 +1,56 @@
+// CS5320 Homework 4 Part 2  dz276 kw296
+
+//1
+MATCH (a) – [:ENEMY_OF] -> (m {name:'Queen'}) <- [:FRIEND_OF]-(a) 
+RETURN a.name
+ORDER BY a.name
+ASCENDING;
+
+//2
+MATCH (a) - [:ENEMY_OF] -> (m {name:'Queen'}) <- [:FRIEND_OF]- (b) <- [:KILLED] - (a)
+RETURN a.name, collect(b.name)
+ORDER BY a.name
+ASCENDING;
+
+//3  
+MATCH (a) - [:FRIEND_OF] -> (m {name:'Queen'}) <- [:ENEMY_OF]- (b) <- [:KILLED] - (a)
+WITH a.name AS fri, count(b.name) AS num
+WHERE num >= 3
+RETURN fri, num
+ORDER BY num
+DESCENDING;
+
+//4 
+MATCH (a:Mixed) <- [:PARENT_OF] - (b) <- [:PARENT_OF] - (c)
+WITH a.name AS son, c.name AS par
+ORDER BY par
+ASCENDING
+RETURN son, collect(par)
+ORDER BY son
+ASCENDING;
+
+//5
+MATCH (a:Mixed) <- [:PARENT_OF] - (b)
+WITH a AS son, collect(b.name) AS parent
+MATCH (son) <- [:PARENT_OF*1..] - (c)
+WHERE NOT (c.name IN parent)
+RETURN son.name, parent, collect(c.name)   
+ORDER BY son.name
+ASCENDING;
+
+//6
+MATCH (a) 
+WHERE NOT EXISTS ((a) <- [:PARENT_OF] - ())
+RETURN a.name
+ORDER BY a.name
+ASCENDING;
+
+//7
+MATCH (a) <- [:PARENT_OF] - (b) - [:PARENT_OF] -> (c)
+WITH a.name AS son, c.name AS sib, count(b.name) AS par
+ORDER BY sib
+ASCENDING
+WHERE par = 2
+RETURN son, collect (sib)
+ORDER BY son
+ASCENDING;
