@@ -14,8 +14,8 @@ public class LeftoverReducer extends Reducer<IntWritable, Node, IntWritable, Nod
 			throws IOException, InterruptedException {
 
 		// fetch lost and size value from configuration
-		// scale down the lost value by 10^3
-		double lost = (double)(Long.parseLong(context.getConfiguration().get("leftover")))/1e3;
+		// scale down the lost value by 10^5
+		double lost = (double)(Long.parseLong(context.getConfiguration().get("leftover")))/1e5;
 		double size = (double)(Long.parseLong(context.getConfiguration().get("size")));
 
 		// Ns here contains every node in the graph
